@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * 后台用户管理Service
+ * 用户管理Service
  * @author czc
  */
 public interface UmsAdminService {
@@ -86,4 +86,5 @@ public interface UmsAdminService {
     UserDetails loadUserByUsername(String username);
 
 
+    UmsAdminCacheService getCacheService();
 }
