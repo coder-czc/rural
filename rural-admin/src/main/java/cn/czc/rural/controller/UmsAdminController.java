@@ -9,6 +9,8 @@ import cn.czc.rural.dto.UpdateAdminPasswordParam;
 import cn.czc.rural.model.UmsAdmin;
 import cn.czc.rural.model.UmsRole;
 import cn.czc.rural.service.UmsAdminService;
+import cn.czc.rural.service.UmsRoleService;
+import cn.hutool.core.collection.CollUtil;
 import io.swagger.annotations.Api;
 
 import io.swagger.annotations.ApiOperation;
@@ -22,9 +24,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -42,6 +46,8 @@ public class UmsAdminController {
     private String tokenHead;
     @Autowired
     private UmsAdminService adminService;
+    @Autowired
+    private UmsRoleService roleService;
 
     @ApiOperation(value = "用户注册")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -83,6 +89,27 @@ public class UmsAdminController {
         return CommonResult.success(tokenMap);
     }
 
+    @ApiOperation(value = "获取当前登录用户信息")
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    @ResponseBody
+    public CommonResult getAdminInfo(Principal principal) {
+        if(principal==null){
+            return CommonResult.unauthorized(null);
+        }
+        String username = principal.getName();
+        UmsAdmin umsAdmin = adminService.getAdminByUsername(username);
+        Map<String, Object> data = new HashMap<>();
+        data.put("username", umsAdmin.getUsername());
+        data.put("menus", roleService.getMenuList(umsAdmin.getId()));
+        data.put("icon", umsAdmin.getIcon());
+        List<UmsRole> roleList = adminService.getRoleList(umsAdmin.getId());
+        if(CollUtil.isNotEmpty(roleList)){
+            List<String> roles = roleList.stream().map(UmsRole::getName).collect(Collectors.toList());
+            data.put("roles",roles);
+        }
+        return CommonResult.success(data);
+    }
+
     @ApiOperation(value = "登出功能")
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     @ResponseBody
@@ -103,7 +130,7 @@ public class UmsAdminController {
     @ApiOperation("获取指定用户信息")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public CommonResult<UmsAdmin> getInfo(@PathVariable Long id) {
+    public CommonResult<UmsAdmin> getInfoById(@PathVariable Long id) {
         UmsAdmin admin = adminService.getItem(id);
         return CommonResult.success(admin);
     }
