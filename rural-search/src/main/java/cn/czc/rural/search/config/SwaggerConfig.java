@@ -19,9 +19,9 @@ public class SwaggerConfig extends BaseSwaggerConfig {
     public SwaggerProperties swaggerProperties() {
         return SwaggerProperties.builder()
                 .apiBasePackage("cn.czc.rural.search.controller")
-                .title("mall搜索系统")
-                .description("mall搜索相关接口文档")
-                .contactName("macro")
+                .title("rural搜索系统")
+                .description("rural搜索相关接口文档")
+                .contactName("czc")
                 .version("1.0")
                 .enableSecurity(false)
                 .build();

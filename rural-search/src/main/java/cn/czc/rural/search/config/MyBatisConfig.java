@@ -8,6 +8,6 @@ import org.springframework.context.annotation.Configuration;
  * @author czc
  */
 @Configuration
-@MapperScan({"com.macro.mall.mapper","com.macro.mall.search.dao"})
+@MapperScan({"cn.czc.rural.mapper","cn.czc.rural.search.dao"})
 public class MyBatisConfig {
 }
