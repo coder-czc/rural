@@ -11,11 +11,89 @@
  Target Server Version : 80031
  File Encoding         : 65001
 
- Date: 16/03/2023 23:10:27
+ Date: 17/03/2023 23:55:06
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for country
+-- ----------------------------
+DROP TABLE IF EXISTS `country`;
+CREATE TABLE `country` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(64) DEFAULT NULL COMMENT '名字',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='县（区）';
+
+-- ----------------------------
+-- Table structure for pms_address
+-- ----------------------------
+DROP TABLE IF EXISTS `pms_address`;
+CREATE TABLE `pms_address` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `country` bigint DEFAULT NULL COMMENT '县（区）',
+  `town` bigint DEFAULT NULL COMMENT '乡（镇）',
+  `village` bigint DEFAULT NULL COMMENT '村（街道、社区）',
+  `tun` bigint DEFAULT NULL COMMENT '屯',
+  `household_id` bigint DEFAULT NULL COMMENT '户',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `户` (`household_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='家庭地址';
+
+-- ----------------------------
+-- Table structure for pms_household
+-- ----------------------------
+DROP TABLE IF EXISTS `pms_household`;
+CREATE TABLE `pms_household` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `no` bigint DEFAULT NULL COMMENT '户编号',
+  `attribute` varchar(64) NOT NULL COMMENT '农户属性',
+  `account` int DEFAULT NULL COMMENT '家庭人口数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='户基础信息';
+
+-- ----------------------------
+-- Table structure for pms_member
+-- ----------------------------
+DROP TABLE IF EXISTS `pms_member`;
+CREATE TABLE `pms_member` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(64) NOT NULL COMMENT '姓名',
+  `gender` int DEFAULT NULL COMMENT '性别：0->未知；1->男；2->女',
+  `id card_no` int DEFAULT NULL COMMENT '身份证号码',
+  `is_head` int NOT NULL COMMENT '是否户主',
+  `relation` varchar(64) DEFAULT NULL COMMENT '与户主的关系',
+  `phone` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '联系电话',
+  `household_id` bigint NOT NULL COMMENT '户ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='家庭成员';
+
+-- ----------------------------
+-- Table structure for town
+-- ----------------------------
+DROP TABLE IF EXISTS `town`;
+CREATE TABLE `town` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(64) NOT NULL COMMENT '名字',
+  `pid` bigint NOT NULL COMMENT '县（区）',
+  PRIMARY KEY (`id`),
+  KEY `县（区）` (`pid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for tun
+-- ----------------------------
+DROP TABLE IF EXISTS `tun`;
+CREATE TABLE `tun` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(64) NOT NULL COMMENT '名字',
+  `pid` bigint NOT NULL COMMENT '村（社区）',
+  PRIMARY KEY (`id`),
+  KEY `村（社区）ID` (`pid`),
+  CONSTRAINT `村（社区）` FOREIGN KEY (`pid`) REFERENCES `village` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Table structure for ums_admin
@@ -175,7 +253,7 @@ INSERT INTO `ums_menu` VALUES (3, 2, '2023-03-15 23:16:33', '用户列表', 1, 0
 INSERT INTO `ums_menu` VALUES (4, 2, '2023-03-15 23:46:24', '角色列表', 1, 0, 'role', 'ums-role', 0);
 INSERT INTO `ums_menu` VALUES (5, 2, '2023-03-16 22:04:29', '菜单列表', 1, 0, 'menu', 'ums-menu', 0);
 INSERT INTO `ums_menu` VALUES (6, 1, '2023-03-16 22:35:34', '按户查询', 1, 0, 'household', 'pms-household', 0);
-INSERT INTO `ums_menu` VALUES (7, 1, '2023-03-16 23:04:46', '按人查询', 1, 0, 'individual', 'pms-individual', 0);
+INSERT INTO `ums_menu` VALUES (7, 1, '2023-03-16 23:04:46', '按人查询', 1, 0, 'member', 'pms-member', 0);
 COMMIT;
 
 -- ----------------------------
@@ -279,5 +357,18 @@ CREATE TABLE `ums_role_resource_relation` (
   `resource_id` bigint DEFAULT NULL COMMENT '资源ID',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC COMMENT='角色资源关系表';
+
+-- ----------------------------
+-- Table structure for village
+-- ----------------------------
+DROP TABLE IF EXISTS `village`;
+CREATE TABLE `village` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(64) NOT NULL COMMENT '名字',
+  `pid` bigint NOT NULL COMMENT '乡（镇）',
+  PRIMARY KEY (`id`),
+  KEY `乡（镇）ID` (`pid`),
+  CONSTRAINT `乡（镇）` FOREIGN KEY (`pid`) REFERENCES `town` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;
