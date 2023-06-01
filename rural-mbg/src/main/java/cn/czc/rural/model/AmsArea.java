@@ -8,7 +8,7 @@ public class AmsArea implements Serializable {
     private Integer id;
 
     @ApiModelProperty(value = "层级")
-    private Byte level;
+    private Integer level;
 
     @ApiModelProperty(value = "父级行政代码")
     private Long parentCode;
@@ -44,11 +44,11 @@ public class AmsArea implements Serializable {
         this.id = id;
     }
 
-    public Byte getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(Byte level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 

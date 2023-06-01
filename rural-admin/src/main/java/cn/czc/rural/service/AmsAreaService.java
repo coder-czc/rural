@@ -43,4 +43,9 @@ public interface AmsAreaService {
      * 分页查询后台菜单
      */
     List<AmsArea> list(Long parentId, Integer pageSize, Integer pageNum);
+
+    /**
+     * 根据层级和父级行政代码获取区域
+     */
+    List<AmsArea> list(Integer level,Long parentCode);
 }

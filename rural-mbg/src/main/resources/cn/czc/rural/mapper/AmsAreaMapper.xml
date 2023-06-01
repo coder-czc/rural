@@ -3,7 +3,7 @@
 <mapper namespace="cn.czc.rural.mapper.AmsAreaMapper">
   <resultMap id="BaseResultMap" type="cn.czc.rural.model.AmsArea">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="level" jdbcType="TINYINT" property="level" />
+    <result column="level" jdbcType="INTEGER" property="level" />
     <result column="parent_code" jdbcType="BIGINT" property="parentCode" />
     <result column="area_code" jdbcType="BIGINT" property="areaCode" />
     <result column="zip_code" jdbcType="INTEGER" property="zipCode" />
@@ -113,7 +113,7 @@
       zip_code, name, short_name, 
       merger_name, pinyin, create_time
       )
-    values (#{level,jdbcType=TINYINT}, #{parentCode,jdbcType=BIGINT}, #{areaCode,jdbcType=BIGINT}, 
+    values (#{level,jdbcType=INTEGER}, #{parentCode,jdbcType=BIGINT}, #{areaCode,jdbcType=BIGINT}, 
       #{zipCode,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{shortName,jdbcType=VARCHAR}, 
       #{mergerName,jdbcType=VARCHAR}, #{pinyin,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
       )
@@ -154,7 +154,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="level != null">
-        #{level,jdbcType=TINYINT},
+        #{level,jdbcType=INTEGER},
       </if>
       <if test="parentCode != null">
         #{parentCode,jdbcType=BIGINT},
@@ -195,7 +195,7 @@
         id = #{row.id,jdbcType=INTEGER},
       </if>
       <if test="row.level != null">
-        level = #{row.level,jdbcType=TINYINT},
+        level = #{row.level,jdbcType=INTEGER},
       </if>
       <if test="row.parentCode != null">
         parent_code = #{row.parentCode,jdbcType=BIGINT},
@@ -229,7 +229,7 @@
   <update id="updateByExample" parameterType="map">
     update ams_area
     set id = #{row.id,jdbcType=INTEGER},
-      level = #{row.level,jdbcType=TINYINT},
+      level = #{row.level,jdbcType=INTEGER},
       parent_code = #{row.parentCode,jdbcType=BIGINT},
       area_code = #{row.areaCode,jdbcType=BIGINT},
       zip_code = #{row.zipCode,jdbcType=INTEGER},
@@ -246,7 +246,7 @@
     update ams_area
     <set>
       <if test="level != null">
-        level = #{level,jdbcType=TINYINT},
+        level = #{level,jdbcType=INTEGER},
       </if>
       <if test="parentCode != null">
         parent_code = #{parentCode,jdbcType=BIGINT},
@@ -277,7 +277,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.czc.rural.model.AmsArea">
     update ams_area
-    set level = #{level,jdbcType=TINYINT},
+    set level = #{level,jdbcType=INTEGER},
       parent_code = #{parentCode,jdbcType=BIGINT},
       area_code = #{areaCode,jdbcType=BIGINT},
       zip_code = #{zipCode,jdbcType=INTEGER},

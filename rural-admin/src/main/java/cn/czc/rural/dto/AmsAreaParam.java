@@ -18,17 +18,17 @@ public class AmsAreaParam {
     private String name;
     @NotEmpty
     @ApiModelProperty(value = "简称", required = true)
-    private String shorName;
+    private String shortName;
     @ApiModelProperty(value = "组合名称")
-    private String mergeName;
+    private String mergerName;
     @ApiModelProperty(value = "拼音")
-    private String pinYin;
+    private String pinyin;
     @ApiModelProperty(value = "父级区域代码")
-    private String parentCode;
+    private Long parentCode;
     @ApiModelProperty(value = "区域代码")
-    private String areaCode;
+    private Long areaCode;
     @ApiModelProperty(value = "邮政编码")
-    private String zipCode;
+    private Integer zipCode;
     @ApiModelProperty(value = "层级")
-    private String level;
+    private Integer level;
 }

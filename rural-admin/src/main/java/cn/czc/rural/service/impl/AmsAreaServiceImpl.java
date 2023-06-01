@@ -23,7 +23,6 @@ public class AmsAreaServiceImpl implements AmsAreaService {
         AmsArea amsArea = new AmsArea();
         BeanUtils.copyProperties(amsAreaParam,amsArea);
         amsArea.setCreateTime(new Date());
-        AmsAreaExample example = new AmsAreaExample();
         areaMapper.insert(amsArea);
         return amsArea;
     }
@@ -46,5 +45,12 @@ public class AmsAreaServiceImpl implements AmsAreaService {
     @Override
     public List<AmsArea> list(Long parentId, Integer pageSize, Integer pageNum) {
         return null;
+    }
+
+    @Override
+    public List<AmsArea> list(Integer level, Long parentCode) {
+        AmsAreaExample example = new AmsAreaExample();
+        example.createCriteria().andLevelEqualTo(level).andParentCodeEqualTo(parentCode);
+        return areaMapper.selectByExample(example);
     }
 }

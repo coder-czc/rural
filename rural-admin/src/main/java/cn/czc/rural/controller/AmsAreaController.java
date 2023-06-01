@@ -10,10 +10,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @Api(tags = "AmsAreaController")
@@ -32,6 +31,15 @@ public class AmsAreaController {
             return CommonResult.failed();
         }
         return CommonResult.success(amsArea);
+    }
+
+    @ApiOperation("根据行政等级和父级行政代码查询")
+    @RequestMapping(value = "/list",method = RequestMethod.GET)
+    @ResponseBody
+    public CommonResult<List<AmsArea>> list(@RequestParam(value = "level",defaultValue = "0") Integer level,
+                                            @RequestParam(value = "parentCode",required = false) Long parentCode) {
+        List<AmsArea> areaList = areaService.list(level,parentCode);
+        return CommonResult.success(areaList);
     }
 
 }
